@@ -4,13 +4,24 @@ containers:
   database:
     image: mysql:8.0
 
+  rabbitmq:
+    build_directory: .
+    dockerfile: .batect/rabbitmq/Dockerfile
+
   go:
     image: golang:1.16
 
 tasks:
-  start-dependencies:
+  dependencies-no-healthcheck:
     dependencies:
       - database
+    run:
+      container: go
+      command: echo starting
+
+  dependencies-healthcheck:
+    dependencies:
+      - rabbitmq
     run:
       container: go
       command: echo starting
